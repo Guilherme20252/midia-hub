@@ -1,0 +1,183 @@
+:root {
+  --bg: #0f1117;
+  --card: #1a1d27;
+  --text: #e8e8ee;
+  --muted: #9a9cb0;
+  --accent: #7c5cff;
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* ---------- Topo ---------- */
+.topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: var(--card);
+}
+
+.topbar h1 {
+  font-size: 1.4rem;
+  color: var(--accent);
+}
+
+.topbar nav {
+  display: flex;
+  gap: 16px;
+}
+
+.topbar a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.topbar a:hover {
+  color: var(--text);
+}
+
+/* ---------- Conteúdo ---------- */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ---------- Formulário de busca ---------- */
+#search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+input,
+select,
+button {
+  font: inherit;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  border: 1px solid #2c3042;
+  background: var(--card);
+  color: var(--text);
+}
+
+input {
+  flex: 1;
+}
+
+button {
+  background: var(--accent);
+  border-color: var(--accent);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* ---------- Grade de resultados ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  background: #222638;
+}
+
+.card h3 {
+  font-size: 0.95rem;
+  padding: 8px 10px 0;
+}
+
+.card button {
+  margin: 8px 10px 10px;
+  padding: 8px;
+}
+
+/* ---------- Tablet ---------- */
+@media (min-width: 768px) {
+  .topbar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #search-form {
+    flex-direction: row;
+  }
+
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* ---------- Seções e biblioteca ---------- */
+section {
+  margin-top: 32px;
+}
+
+section h2 {
+  margin-bottom: 12px;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card select {
+  margin: 8px 10px 0;
+  padding: 6px 8px;
+  font-size: 0.85rem;
+}
+
+.card .btn-danger {
+  background: transparent;
+  border-color: #e5484d;
+  color: #e5484d;
+}
+
+@media (min-width: 768px) {
+  .filters {
+    flex-direction: row;
+  }
+}
+
+.grid {
+  margin-bottom: 32px;
+}
