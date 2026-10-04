@@ -27,40 +27,17 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// TMDB e RAWG devolvem formatos diferentes; aqui padronizamos
-function normalize(item, type) {
-  if (type === 'game') {
-    return {
-      externalId: String(item.id),
-      type,
-      title: item.name,
-      posterUrl: item.background_image || '',
-    };
-  }
-  return {
-    externalId: String(item.id),
-    type,
-    title: item.title || item.name,
-    posterUrl: item.poster_path
-      ? `https://image.tmdb.org/t/p/w300${item.poster_path}`
-      : '',
-  };
-}
 
-// ---------- Busca nas APIs ----------
+const API_URL = 'http://localhost:3000';
+
 async function searchMedia(query, type) {
-  let url;
-  if (type === 'game') {
-    url = `https://api.rawg.io/api/games?key=${RAWG_KEY}&search=${encodeURIComponent(query)}&page_size=18`;
-  } else {
-    url = `https://api.themoviedb.org/3/search/${type}?api_key=${TMDB_KEY}&query=${encodeURIComponent(query)}&language=pt-BR`;
-  }
-
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Erro ${res.status} na busca. Confira sua chave.`);
-  const data = await res.json();
-  return data.results.map((item) => normalize(item, type));
+  const res = await fetch(
+    `${API_URL}/search?q=${encodeURIComponent(query)}&type=${type}`
+  );
+  if (!res.ok) throw new Error(`Erro ${res.status} na busca.`);
+  return res.json();
 }
+
 
 // ---------- Renderização ----------
 function renderResults(items) {
