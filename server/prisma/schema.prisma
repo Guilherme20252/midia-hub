@@ -1,0 +1,35 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int           @id @default(autoincrement())
+  name      String
+  email     String        @unique
+  password  String
+  items     LibraryItem[]
+  createdAt DateTime      @default(now())
+}
+
+model LibraryItem {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  externalId String
+  type       String
+  title      String
+  posterUrl  String?
+  genres     String[]
+  status     String   @default("want")
+  rating     Int?
+  review     String?
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, externalId, type])
+}
