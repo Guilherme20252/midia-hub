@@ -135,8 +135,9 @@ results.addEventListener('click', async (e) => {
         posterUrl: item.posterUrl,
       }),
     });
-    library.unshift(created);
+       library.unshift(created);
     renderLibrary();
+    loadStats();
   } catch (err) {
     alert(err.message);
   } finally {
@@ -167,6 +168,7 @@ libraryList.addEventListener('change', async (e) => {
     alert(err.message);
   }
   renderLibrary();
+  loadStats();
 });
 
 // Remover
@@ -179,6 +181,7 @@ libraryList.addEventListener('click', async (e) => {
     await request(`/library/${id}`, { method: 'DELETE' });
     library = library.filter((i) => i.id !== id);
     renderLibrary();
+    loadStats();
   } catch (err) {
     alert(err.message);
   }
