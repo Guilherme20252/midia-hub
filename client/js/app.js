@@ -1,13 +1,18 @@
+// ---------- Proteção: só entra logado ----------
+if (!getToken()) location.href = 'login.html';
+
 // ---------- Elementos da página ----------
 const searchForm = document.getElementById('search-form');
 const results = document.getElementById('results');
 const libraryList = document.getElementById('library-list');
 const filterStatus = document.getElementById('filter-status');
 const filterType = document.getElementById('filter-type');
+const userName = document.getElementById('user-name');
+const logoutBtn = document.getElementById('logout');
 
 // ---------- Estado ----------
 let lastResults = [];
-let library = JSON.parse(localStorage.getItem('library')) || [];
+let library = [];
 
 const STATUS_LABELS = {
   want: 'Quero ver/jogar',
@@ -16,28 +21,26 @@ const STATUS_LABELS = {
 };
 
 // ---------- Funções auxiliares ----------
-function saveLibrary() {
-  localStorage.setItem('library', JSON.stringify(library));
-}
-
-// Evita que um título com caracteres especiais quebre o HTML
 function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
 }
 
-
-const API_URL = 'http://localhost:3000';
-
+// ---------- Chamadas à API ----------
 async function searchMedia(query, type) {
-  const res = await fetch(
-    `${API_URL}/search?q=${encodeURIComponent(query)}&type=${type}`
-  );
-  if (!res.ok) throw new Error(`Erro ${res.status} na busca.`);
-  return res.json();
+  return request(`/search?q=${encodeURIComponent(query)}&type=${type}`);
 }
 
+async function loadLibrary() {
+  libraryList.innerHTML = '<p>Carregando biblioteca...</p>';
+  try {
+    library = await request('/library');
+    renderLibrary();
+  } catch (err) {
+    libraryList.innerHTML = `<p>Não foi possível carregar: ${escapeHtml(err.message)}</p>`;
+  }
+}
 
 // ---------- Renderização ----------
 function renderResults(items) {
@@ -72,7 +75,6 @@ function renderLibrary() {
 
   libraryList.innerHTML = filtered
     .map((item) => {
-      const key = `${item.type}-${item.externalId}`;
       const statusOptions = Object.entries(STATUS_LABELS)
         .map(
           ([value, label]) =>
@@ -89,11 +91,11 @@ function renderLibrary() {
 
       return `
       <article class="card">
-        <img src="${item.posterUrl}" alt="${escapeHtml(item.title)}" loading="lazy">
+        <img src="${item.posterUrl || ''}" alt="${escapeHtml(item.title)}" loading="lazy">
         <h3>${escapeHtml(item.title)}</h3>
-        <select data-action="status" data-key="${key}">${statusOptions}</select>
-        <select data-action="rating" data-key="${key}">${ratingOptions}</select>
-        <button class="btn-danger" data-action="remove" data-key="${key}">Remover</button>
+        <select data-action="status" data-id="${item.id}">${statusOptions}</select>
+        <select data-action="rating" data-id="${item.id}">${ratingOptions}</select>
+        <button class="btn-danger" data-action="remove" data-id="${item.id}">Remover</button>
       </article>`;
     })
     .join('');
@@ -115,54 +117,81 @@ searchForm.addEventListener('submit', async (e) => {
   }
 });
 
-// Clique em "Adicionar" nos resultados
-results.addEventListener('click', (e) => {
+// Adicionar à biblioteca
+results.addEventListener('click', async (e) => {
   const button = e.target.closest('button[data-index]');
   if (!button) return;
 
   const item = lastResults[Number(button.dataset.index)];
-  const exists = library.some(
-    (i) => i.externalId === item.externalId && i.type === item.type
-  );
+  button.disabled = true;
 
-  if (exists) {
-    alert('Esse item já está na sua biblioteca!');
-    return;
+  try {
+    const created = await request('/library', {
+      method: 'POST',
+      body: JSON.stringify({
+        externalId: item.externalId,
+        type: item.type,
+        title: item.title,
+        posterUrl: item.posterUrl,
+      }),
+    });
+    library.unshift(created);
+    renderLibrary();
+  } catch (err) {
+    alert(err.message);
+  } finally {
+    button.disabled = false;
   }
-
-  library.push({ ...item, status: 'want', rating: null, createdAt: Date.now() });
-  saveLibrary();
-  renderLibrary();
 });
 
-// Mudar status/nota na biblioteca
-libraryList.addEventListener('change', (e) => {
-  const { action, key } = e.target.dataset;
+// Mudar status ou nota
+libraryList.addEventListener('change', async (e) => {
+  const { action, id } = e.target.dataset;
   if (!action) return;
 
-  const item = library.find((i) => `${i.type}-${i.externalId}` === key);
+  const item = library.find((i) => i.id === Number(id));
   if (!item) return;
 
-  if (action === 'status') item.status = e.target.value;
-  if (action === 'rating') item.rating = e.target.value ? Number(e.target.value) : null;
+  const body =
+    action === 'status'
+      ? { status: e.target.value }
+      : { rating: e.target.value ? Number(e.target.value) : null };
 
-  saveLibrary();
+  try {
+    const updated = await request(`/library/${item.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(body),
+    });
+    Object.assign(item, updated);
+  } catch (err) {
+    alert(err.message);
+  }
   renderLibrary();
 });
 
-// Remover da biblioteca
-libraryList.addEventListener('click', (e) => {
+// Remover
+libraryList.addEventListener('click', async (e) => {
   const button = e.target.closest('button[data-action="remove"]');
   if (!button) return;
 
-  library = library.filter((i) => `${i.type}-${i.externalId}` !== button.dataset.key);
-  saveLibrary();
-  renderLibrary();
+  const id = Number(button.dataset.id);
+  try {
+    await request(`/library/${id}`, { method: 'DELETE' });
+    library = library.filter((i) => i.id !== id);
+    renderLibrary();
+  } catch (err) {
+    alert(err.message);
+  }
 });
 
 // Filtros
 filterStatus.addEventListener('change', renderLibrary);
 filterType.addEventListener('change', renderLibrary);
 
+// Sair
+logoutBtn.addEventListener('click', logout);
+
 // ---------- Início ----------
-renderLibrary();
+const savedUser = JSON.parse(localStorage.getItem('user') || 'null');
+if (savedUser) userName.textContent = `Olá, ${savedUser.name}`;
+loadLibrary();

@@ -181,3 +181,40 @@ section h2 {
 .grid {
   margin-bottom: 32px;
 }
+
+/* ---------- Login ---------- */
+.auth-box {
+  max-width: 380px;
+  margin: 48px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-box h1 {
+  color: var(--accent);
+}
+
+#auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.auth-box a {
+  color: var(--accent);
+}
+
+.auth-error {
+  color: #e5484d;
+}
+
+/* ---------- Topo: usuário e sair ---------- */
+#user-name {
+  color: var(--muted);
+}
+
+.btn-small {
+  padding: 4px 12px;
+  font-size: 0.85rem;
+}
