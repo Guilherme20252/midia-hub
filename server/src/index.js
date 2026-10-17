@@ -8,7 +8,13 @@ const statsRoutes = require('./routes/stats');
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = (process.env.FRONTEND_URL || '')
+  .split(',')
+  .map((url) => url.trim())
+  .filter(Boolean);
+
+app.use(cors({ origin: allowedOrigins.length ? allowedOrigins : true }));
+
 app.use(express.json());
 
 app.get('/health', (req, res) => res.json({ ok: true }));
