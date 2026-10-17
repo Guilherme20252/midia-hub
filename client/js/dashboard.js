@@ -11,6 +11,11 @@ let statusChart = null;
 function drawChart(current, canvasId, kind, labels, values, title) {
   const ctx = document.getElementById(canvasId);
   if (current) current.destroy();
+
+  const css = getComputedStyle(document.documentElement);
+  const text = css.getPropertyValue('--text').trim();
+  const muted = css.getPropertyValue('--muted').trim();
+
   return new Chart(ctx, {
     type: kind,
     data: {
@@ -22,13 +27,13 @@ function drawChart(current, canvasId, kind, labels, values, title) {
     },
     options: {
       plugins: {
-        title: { display: true, text: title, color: '#e8e8ee' },
-        legend: { labels: { color: '#e8e8ee' } },
+        title: { display: true, text: title, color: text },
+        legend: { labels: { color: text } },
       },
       scales: kind === 'bar'
         ? {
-            x: { ticks: { color: '#9a9cb0' } },
-            y: { ticks: { color: '#9a9cb0', precision: 0 }, beginAtZero: true },
+            x: { ticks: { color: muted } },
+            y: { ticks: { color: muted, precision: 0 }, beginAtZero: true },
           }
         : {},
     },
