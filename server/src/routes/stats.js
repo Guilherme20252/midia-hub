@@ -1,3 +1,4 @@
+const { translateGenre } = require('../services/genres');
 const express = require('express');
 const prisma = require('../lib/prisma');
 const auth = require('../middlewares/auth');
@@ -28,8 +29,9 @@ router.get('/', async (req, res) => {
         ratingCount++;
       }
 
-      for (const genre of item.genres) {
-        genreCount[genre] = (genreCount[genre] || 0) + 1;
+           for (const genre of item.genres) {
+        const name = translateGenre(genre);
+        genreCount[name] = (genreCount[name] || 0) + 1;
       }
     }
 

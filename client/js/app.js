@@ -128,11 +128,12 @@ results.addEventListener('click', async (e) => {
   try {
     const created = await request('/library', {
       method: 'POST',
-      body: JSON.stringify({
+           body: JSON.stringify({
         externalId: item.externalId,
         type: item.type,
         title: item.title,
         posterUrl: item.posterUrl,
+        genres: item.genres,
       }),
     });
        library.unshift(created);
