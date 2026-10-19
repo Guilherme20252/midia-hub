@@ -35,9 +35,7 @@ function normalize(item, type, genreMap) {
     externalId: String(item.id),
     type,
     title: item.title || item.name,
-    posterUrl: item.poster_path
-      ? `https://image.tmdb.org/t/p/w300${item.poster_path}`
-      : '',
+    posterUrl: item.poster_path ? `https://image.tmdb.org/t/p/w300${item.poster_path}` : '',
     genres: (item.genre_ids || []).map((id) => genreMap[id]).filter(Boolean),
   };
 }

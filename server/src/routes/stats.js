@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
         ratingCount++;
       }
 
-           for (const genre of item.genres) {
+      for (const genre of item.genres) {
         const name = translateGenre(genre);
         genreCount[name] = (genreCount[name] || 0) + 1;
       }

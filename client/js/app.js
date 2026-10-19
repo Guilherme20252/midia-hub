@@ -55,7 +55,7 @@ function renderResults(items) {
         <img src="${item.posterUrl}" alt="${escapeHtml(item.title)}" loading="lazy">
         <h3>${escapeHtml(item.title)}</h3>
         <button data-index="${index}">Adicionar</button>
-      </article>`
+      </article>`,
     )
     .join('');
 }
@@ -65,7 +65,7 @@ function renderLibrary() {
   const type = filterType.value;
 
   const filtered = library.filter(
-    (item) => (!status || item.status === status) && (!type || item.type === type)
+    (item) => (!status || item.status === status) && (!type || item.type === type),
   );
 
   if (!filtered.length) {
@@ -78,18 +78,18 @@ function renderLibrary() {
       const statusOptions = Object.entries(STATUS_LABELS)
         .map(
           ([value, label]) =>
-            `<option value="${value}" ${item.status === value ? 'selected' : ''}>${label}</option>`
+            `<option value="${value}" ${item.status === value ? 'selected' : ''}>${label}</option>`,
         )
         .join('');
       const ratingOptions = ['<option value="">Sem nota</option>']
         .concat(
           Array.from({ length: 10 }, (_, i) => i + 1).map(
-            (n) => `<option value="${n}" ${item.rating === n ? 'selected' : ''}>${n}</option>`
-          )
+            (n) => `<option value="${n}" ${item.rating === n ? 'selected' : ''}>${n}</option>`,
+          ),
         )
         .join('');
 
-         return `
+      return `
       <article class="card">
         <img src="${item.posterUrl || ''}" alt="${escapeHtml(item.title)}" loading="lazy">
         <h3>${escapeHtml(item.title)}</h3>
@@ -129,7 +129,7 @@ results.addEventListener('click', async (e) => {
   try {
     const created = await request('/library', {
       method: 'POST',
-           body: JSON.stringify({
+      body: JSON.stringify({
         externalId: item.externalId,
         type: item.type,
         title: item.title,
@@ -137,7 +137,7 @@ results.addEventListener('click', async (e) => {
         genres: item.genres,
       }),
     });
-       library.unshift(created);
+    library.unshift(created);
     renderLibrary();
     loadStats();
   } catch (err) {
@@ -155,7 +155,7 @@ libraryList.addEventListener('change', async (e) => {
   const item = library.find((i) => i.id === Number(id));
   if (!item) return;
 
-    let body;
+  let body;
   if (action === 'status') body = { status: e.target.value };
   else if (action === 'rating') body = { rating: e.target.value ? Number(e.target.value) : null };
   else if (action === 'review') body = { review: e.target.value.trim() || null };

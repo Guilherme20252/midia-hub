@@ -20,22 +20,25 @@ function drawChart(current, canvasId, kind, labels, values, title) {
     type: kind,
     data: {
       labels,
-      datasets: [{
-        data: values,
-        backgroundColor: ['#7c5cff', '#4ea1ff', '#35c28a'],
-      }],
+      datasets: [
+        {
+          data: values,
+          backgroundColor: ['#7c5cff', '#4ea1ff', '#35c28a'],
+        },
+      ],
     },
     options: {
       plugins: {
         title: { display: true, text: title, color: text },
         legend: { labels: { color: text } },
       },
-      scales: kind === 'bar'
-        ? {
-            x: { ticks: { color: muted } },
-            y: { ticks: { color: muted, precision: 0 }, beginAtZero: true },
-          }
-        : {},
+      scales:
+        kind === 'bar'
+          ? {
+              x: { ticks: { color: muted } },
+              y: { ticks: { color: muted, precision: 0 }, beginAtZero: true },
+            }
+          : {},
     },
   });
 }
@@ -49,16 +52,20 @@ async function loadStats() {
     document.getElementById('stat-done').textContent = s.byStatus.done;
 
     typeChart = drawChart(
-      typeChart, 'chart-type', 'doughnut',
+      typeChart,
+      'chart-type',
+      'doughnut',
       Object.keys(s.byType).map((k) => TYPE_LABELS[k]),
       Object.values(s.byType),
-      'Itens por tipo'
+      'Itens por tipo',
     );
     statusChart = drawChart(
-      statusChart, 'chart-status', 'bar',
+      statusChart,
+      'chart-status',
+      'bar',
       Object.keys(s.byStatus).map((k) => STATUS_NAMES[k]),
       Object.values(s.byStatus),
-      'Itens por status'
+      'Itens por status',
     );
 
     const list = document.getElementById('top-genres');
