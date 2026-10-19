@@ -299,3 +299,12 @@ section h2 {
 [data-theme="light"] .card img {
   background: #e4e6ef;
 }
+
+#surprise {
+  margin-top: 24px;
+}
+
+#surprise-result {
+  margin-top: 12px;
+  font-weight: 600;
+}

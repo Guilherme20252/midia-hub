@@ -89,12 +89,13 @@ function renderLibrary() {
         )
         .join('');
 
-      return `
+         return `
       <article class="card">
         <img src="${item.posterUrl || ''}" alt="${escapeHtml(item.title)}" loading="lazy">
         <h3>${escapeHtml(item.title)}</h3>
         <select data-action="status" data-id="${item.id}">${statusOptions}</select>
         <select data-action="rating" data-id="${item.id}">${ratingOptions}</select>
+        <textarea data-action="review" data-id="${item.id}" maxlength="1000" placeholder="Escreva sua review...">${escapeHtml(item.review || '')}</textarea>
         <button class="btn-danger" data-action="remove" data-id="${item.id}">Remover</button>
       </article>`;
     })
@@ -154,10 +155,11 @@ libraryList.addEventListener('change', async (e) => {
   const item = library.find((i) => i.id === Number(id));
   if (!item) return;
 
-  const body =
-    action === 'status'
-      ? { status: e.target.value }
-      : { rating: e.target.value ? Number(e.target.value) : null };
+    let body;
+  if (action === 'status') body = { status: e.target.value };
+  else if (action === 'rating') body = { rating: e.target.value ? Number(e.target.value) : null };
+  else if (action === 'review') body = { review: e.target.value.trim() || null };
+  else return;
 
   try {
     const updated = await request(`/library/${item.id}`, {
@@ -191,6 +193,21 @@ libraryList.addEventListener('click', async (e) => {
 // Filtros
 filterStatus.addEventListener('change', renderLibrary);
 filterType.addEventListener('change', renderLibrary);
+
+// Me surpreenda
+const surpriseBtn = document.getElementById('surprise');
+const surpriseResult = document.getElementById('surprise-result');
+const TYPE_NAMES = { movie: 'Filme', tv: 'Série', game: 'Jogo' };
+
+surpriseBtn.addEventListener('click', () => {
+  const wanted = library.filter((i) => i.status === 'want');
+  if (!wanted.length) {
+    surpriseResult.textContent = 'Você ainda não tem itens em "Quero ver/jogar".';
+    return;
+  }
+  const pick = wanted[Math.floor(Math.random() * wanted.length)];
+  surpriseResult.textContent = `Que tal: ${pick.title} (${TYPE_NAMES[pick.type]})?`;
+});
 
 // Sair
 logoutBtn.addEventListener('click', logout);
