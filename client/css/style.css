@@ -284,19 +284,19 @@ section h2 {
 }
 
 /* ---------- Tema claro ---------- */
-[data-theme="light"] {
+[data-theme='light'] {
   --bg: #f4f5f9;
   --card: #ffffff;
   --text: #1c1e29;
   --muted: #5d6075;
 }
 
-[data-theme="light"] input,
-[data-theme="light"] select {
+[data-theme='light'] input,
+[data-theme='light'] select {
   border-color: #d3d6e2;
 }
 
-[data-theme="light"] .card img {
+[data-theme='light'] .card img {
   background: #e4e6ef;
 }
 

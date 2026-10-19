@@ -1,79 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mídia Hub</title>
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <header class="topbar">
-    <h1>Mídia Hub</h1>
-       <nav>
-      <a href="#search">Buscar</a>
-      <a href="#library">Biblioteca</a>
-      <a href="#dashboard">Dashboard</a>
-      <span id="user-name"></span>
-      <button type="button" id="theme-toggle" class="btn-small" aria-label="Alternar tema"></button>
-      <button type="button" id="logout" class="btn-small">Sair</button>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mídia Hub</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Mídia Hub</h1>
+      <nav>
+        <a href="#search">Buscar</a>
+        <a href="#library">Biblioteca</a>
+        <a href="#dashboard">Dashboard</a>
+        <span id="user-name"></span>
+        <button
+          type="button"
+          id="theme-toggle"
+          class="btn-small"
+          aria-label="Alternar tema"
+        ></button>
+        <button type="button" id="logout" class="btn-small">Sair</button>
+      </nav>
+    </header>
 
     <main>
-    <section id="search">
-      <form id="search-form">
-        <input type="text" id="query" placeholder="Busque filmes, séries ou jogos..." required>
-        <select id="type">
-          <option value="movie">Filmes</option>
-          <option value="tv">Séries</option>
-          <option value="game">Jogos</option>
-        </select>
-        <button type="submit">Buscar</button>
-      </form>
-      <div id="results" class="grid"></div>
-    </section>
+      <section id="search">
+        <form id="search-form">
+          <input type="text" id="query" placeholder="Busque filmes, séries ou jogos..." required />
+          <select id="type">
+            <option value="movie">Filmes</option>
+            <option value="tv">Séries</option>
+            <option value="game">Jogos</option>
+          </select>
+          <button type="submit">Buscar</button>
+        </form>
+        <div id="results" class="grid"></div>
+      </section>
 
-       <section id="library">
-      <h2>Minha biblioteca</h2>
-      <div class="filters">
-        <select id="filter-status">
-          <option value="">Todos os status</option>
-          <option value="want">Quero ver/Jogar</option>
-          <option value="in_progress">Em andamento</option>
-          <option value="done">Concluído</option>
-        </select>
-        <select id="filter-type">
-          <option value="">Todos os tipos</option>
-          <option value="movie">Filmes</option>
-          <option value="tv">Séries</option>
-          <option value="game">Jogos</option>
-        </select>
-      </div>
-      <button type="button" id="surprise">🎲 Me surpreenda</button>
-      <p id="surprise-result"></p>
-      <div id="library-list" class="grid"></div>
-    </section>
-    
-        <section id="dashboard">
-      <h2>Dashboard</h2>
-      <div class="stat-cards">
-        <div class="stat-card"><span id="stat-total">0</span><small>Itens</small></div>
-        <div class="stat-card"><span id="stat-avg">-</span><small>Nota média</small></div>
-        <div class="stat-card"><span id="stat-done">0</span><small>Concluídos</small></div>
-      </div>
-      <div class="charts">
-        <div class="chart-box"><canvas id="chart-type"></canvas></div>
-        <div class="chart-box"><canvas id="chart-status"></canvas></div>
-      </div>
-      <h3>Gêneros mais frequentes</h3>
-      <ul id="top-genres" class="genre-list"></ul>
-    </section>
-  </main>
+      <section id="library">
+        <h2>Minha biblioteca</h2>
+        <div class="filters">
+          <select id="filter-status">
+            <option value="">Todos os status</option>
+            <option value="want">Quero ver/Jogar</option>
+            <option value="in_progress">Em andamento</option>
+            <option value="done">Concluído</option>
+          </select>
+          <select id="filter-type">
+            <option value="">Todos os tipos</option>
+            <option value="movie">Filmes</option>
+            <option value="tv">Séries</option>
+            <option value="game">Jogos</option>
+          </select>
+        </div>
+        <button type="button" id="surprise">🎲 Me surpreenda</button>
+        <p id="surprise-result"></p>
+        <div id="library-list" class="grid"></div>
+      </section>
+
+      <section id="dashboard">
+        <h2>Dashboard</h2>
+        <div class="stat-cards">
+          <div class="stat-card"><span id="stat-total">0</span><small>Itens</small></div>
+          <div class="stat-card"><span id="stat-avg">-</span><small>Nota média</small></div>
+          <div class="stat-card"><span id="stat-done">0</span><small>Concluídos</small></div>
+        </div>
+        <div class="charts">
+          <div class="chart-box"><canvas id="chart-type"></canvas></div>
+          <div class="chart-box"><canvas id="chart-status"></canvas></div>
+        </div>
+        <h3>Gêneros mais frequentes</h3>
+        <ul id="top-genres" class="genre-list"></ul>
+      </section>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
-  <script src="js/api.js"></script>
-  <script src="js/theme.js"></script>
-  <script src="js/app.js"></script>
-  <script src="js/dashboard.js"></script>
-</body>
+    <script src="js/api.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
 </html>

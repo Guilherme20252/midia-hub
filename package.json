@@ -1,0 +1,20 @@
+{
+  "name": "midia-hub",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Hub para organizar filmes, séries e jogos",
+  "scripts": {
+    "lint": "eslint .",
+    "format": "prettier --write \"client/**/*.{js,css,html}\" \"server/src/**/*.js\"",
+    "format:check": "prettier --check \"client/**/*.{js,css,html}\" \"server/src/**/*.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
+    "prettier": "^3.0.0"
+  }
+}
